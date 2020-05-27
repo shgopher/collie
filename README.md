@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    Picture processing tools like compressing pictures, adding watermarks, etc ,it support batch processing, written in GO.
+    Picture processing tools like compressing pictures, adding watermarks, etc ,it support batch processing.
 </p>
 
 <p align="center">
