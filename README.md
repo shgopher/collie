@@ -9,11 +9,8 @@
 </p>
 
 <p align="center">
-    <a href="https://book.go-admin.cn/en">Documentation</a> | 
-    <a href="./README_CN.md">中文介绍</a> |
-    <a href="https://demo.go-admin.com">DEMO</a> |
-    <a href="https://demo.go-admin.cn">中文DEMO</a> |
-    <a href="http://discuss.go-admin.com">Forum</a>
+    <a href="#">Documentation</a> | 
+    <a href="#">中文介绍</a> 
 </p>
 
 <p align="center">
