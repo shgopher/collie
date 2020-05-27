@@ -31,8 +31,8 @@
 </p>
 
 ### Features
-- :bullettrain_side: **Fast**: leveraging go's high concurrency capabilities, this tool has unparalleled speed.
-- :bike: **Easy**: You just need install it to the terminal and you can get started quickly.
+- 🚄 **Fast**: leveraging go's high concurrency capabilities, this tool has unparalleled speed.
+- 🚲 **Easy**: You just need install it to the terminal and you can get started quickly.
 ### How to
 ```bash
 ```
