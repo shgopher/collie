@@ -33,6 +33,8 @@
 - 🚲 **Easy**: you just need install it to the terminal and you can get started quickly.
 ### How to use
 ```bash
+collie example_path -x 1000 
 ```
+
 
 
