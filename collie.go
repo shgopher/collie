@@ -1,22 +1,37 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/golang/glog"
 	"github.com/googege/gotools/id"
 	"github.com/nfnt/resize"
 	"image"
+	"image/gif"
 	"image/jpeg"
+	"image/png"
 	"io"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 )
-
+var (
+	root string
+	outPath string
+	width int
+	quality int
+)
+func init(){
+	flag.StringVar(&root,"root",".","root path")
+	flag.StringVar(&outPath,"outPath",".","out put dir")
+	flag.IntVar(&width,"width",0,"picture widh")
+	flag.IntVar(&quality,"quality",75,"quality of the picture")
+}
 func main() {
 	fmt.Println("collie is runing...🚀")
-	DataProcessing("./test", "./test_open", 0, 90)
+	DataProcessing(root, outPath, width, quality)
 }
 
 func retrieveData(root string) (value chan string, err chan error) {
@@ -74,9 +89,19 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				select {
 				case r, ok := <-reader:
 					if ok {
-						img, err := jpeg.Decode(r)
+						v,ok := r.(*os.File)
+						if !ok {
+							glog.Errorln("not file.")
+						}
+						_,name1 := filepath.Split(v.Name())
+						name := findName(name1)
+						if name == "" && name1 != ".DS_Store"{
+							fmt.Println(name1)
+							glog.Errorln("not file..")
+						}
+						img, err := isJpg(name,r)
 						if err != nil {
-							fmt.Println(err)
+							glog.Errorln(err)
 						} else {
 							b <- img
 						}
@@ -168,4 +193,28 @@ func onlyID1() string {
 	}
 	glog.V(1)
 	return u.String()
+}
+func findName(name string)string {
+	v := name[len(name)-4:]
+	v1 := name[len(name)-3:]
+	if v == "jpeg"{
+		return v
+	}
+	if v1 == "jpg"|| v1 == "png" || v1 == "gif" {
+		return v1
+	}
+	return ""
+}
+func isJpg(name string,r io.Reader,)(image.Image,error){
+	name = strings.ToLower(name)
+	switch name {
+	case "jpeg","jpg":
+		return jpeg.Decode(r)
+	case "png":
+		return png.Decode(r)
+	case "gif":
+		return gif.Decode(r)
+	default:
+		return nil,fmt.Errorf("just can use jpeg jpg png and gif")
+	}
 }
