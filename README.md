@@ -31,8 +31,8 @@
 </p>
 
 ### Features
-- 🚄 **Fast**: leveraging go's high concurrency capabilities, this tool has unparalleled speed.
-- 🚲 **Easy**: You just need install it to the terminal and you can get started quickly.
+- 🚄 **fast**: leveraging go's high concurrency capabilities, this tool has unparalleled speed.
+- 🚲 **easy**: you just need install it to the terminal and you can get started quickly.
 ### How to
 ```bash
 ```
