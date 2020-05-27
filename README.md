@@ -20,7 +20,7 @@
   <a href="https://goreportcard.com/badge/github.com/googege/collie"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/googege/colliee"></a>
   <a href="https://golang.org"><img alt="golang" src="https://img.shields.io/badge/awesome-golang-blue.svg"></a>
   <a href="https://pkg.go.dev/search?q=googege" rel="nofollow"><img src="https://camo.githubusercontent.com/a9a286d43bdfff9fb41b88b25b35ea8edd2634fc/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f646572656b7061726b65722f64656c76653f7374617475732e737667" alt="GoDoc" data-canonical-src="https://godoc.org/github.com/derekparker/delve?status.svg" style="max-width:100%;"></a>
-  <a href="https://raw.githubusercontent.com/googege/collie/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/badge/license-Apache2.0-blue.svg" alt="license" data-canonical-src="https://img.shields.io/badge/license-BDS3-blue.svg" style="max-width:100%;"></a>
+  <a href="https://raw.githubusercontent.com/googege/collie/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/badge/license-BSD 3 Clause-blue.svg" alt="license" data-canonical-src="https://img.shields.io/badge/license-BDS3-blue.svg" style="max-width:100%;"></a>
 </p> 
 
 <p align="center">
