@@ -9,11 +9,6 @@
 </p>
 
 <p align="center">
-    <a href="#">Documentation</a> | 
-    <a href="#">中文介绍</a> 
-</p>
-
-<p align="center">
     <a href="https://travis-ci.com/googege/collie.svg?branch=master">
     <img src="https://travis-ci.com/googege/collie.svg?branch=master"/>
     </a>
