@@ -30,7 +30,7 @@
 
 - 🚲 **Easy**: you just need install it to the terminal and you can get started quickly.
 ### How to use
-```bash
+```go
 collie -r -o - w -q
 ```
 - `-r` the resource photos dir path
@@ -40,7 +40,7 @@ collie -r -o - w -q
 
 like:
 
-```bash
+```go
 // add "gopath/bin" to PATH. 
 go get -u github.com/googege/collie 
 //
