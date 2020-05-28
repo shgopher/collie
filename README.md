@@ -3,7 +3,10 @@
     <img width="20%" alt="github.com/googege/collie" src="./logo.jpg">
   </a>
 </p>
-
+<p align="center">
+<a href="https://www.bilibili.com/video/BV1za4y1e7U9/">视频演示</a>
+<a href="https://www.youtube.com/watch?v=3nDGifbqdug">Video presentation</a>
+</p>
 <p align="center">
     Picture processing tools like compressing pictures, adding watermarks, etc ,it support batch processing.
 </p>
@@ -42,9 +45,8 @@ collie -r=/Users/googege/Desktop/test -o=/Users/googege/Desktop/app -w=0 -q=80
 ```
 suport png jpg jpeg and gif ,and all of the output is jpeg
 ### vedio about collie
-<p align="center">
-<iframe src="//player.bilibili.com/player.html?aid=668293489&bvid=BV1za4y1e7U9&cid=196068361&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</p>
+
+
 
 
 
