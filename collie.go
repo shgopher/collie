@@ -33,9 +33,9 @@ func init() {
 	flag.Parse()
 }
 func main() {
-	fmt.Println(root, outPath, width, quality)
 	fmt.Println("collie is runing...🚀")
 	DataProcessing(root, outPath, width, quality)
+	fmt.Println("collie is over ☕️")
 }
 
 func retrieveData(root string) (value chan string, err chan error) {
