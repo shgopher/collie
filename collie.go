@@ -37,6 +37,7 @@ func main() {
 	DataProcessing(root, outPath, width, quality)
 	fmt.Println("collie is over ☕️")
 }
+
 // get file's path
 func retrieveData(root string) (value chan string, err chan error) {
 	err = make(chan error, 1)
@@ -57,6 +58,7 @@ func retrieveData(root string) (value chan string, err chan error) {
 	}()
 	return
 }
+
 // get file send to a chan.
 func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	for v := range file {
@@ -69,6 +71,7 @@ func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	}
 	wg.Done()
 }
+
 // resize and create a new photo with only id name.
 func DataProcessing(root string, outputFile string, wid int, q int) {
 	reader := make(chan io.Reader)
