@@ -40,6 +40,11 @@ like:
 ```bash
 collie -r=/Users/googege/Desktop/test -o=/Users/googege/Desktop/app -w=0 -q=80
 ```
-
 suport png jpg jpeg and gif ,and all of the output is jpeg
+### vedio about collie
+<p align="center">
+<iframe src="//player.bilibili.com/player.html?aid=668293489&bvid=BV1za4y1e7U9&cid=196068361&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</p>
+
+
 
