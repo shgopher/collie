@@ -41,6 +41,9 @@ collie -r -o - w -q
 like:
 
 ```bash
+// add "gopath/bin" to PATH. 
+go get -u github.com/googege/collie 
+//
 collie -r=/Users/googege/Desktop/test -o=/Users/googege/Desktop/app -w=0 -q=80
 ```
 suport png jpg jpeg and gif ,and all of the output is jpeg
