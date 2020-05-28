@@ -28,7 +28,17 @@
 - 🚲 **Easy**: you just need install it to the terminal and you can get started quickly.
 ### How to use
 ```bash
-collie example_path -x 1000 
+collie -r -o - w -q
+```
+- `-r` the resource photos dir path
+- `-o` the output dir path
+- `-w` the result photos' width ,or you can set 0,you will get the same width with the old one.
+- `-q` the quality of the output photos from 20 to 100.
+
+like:
+
+```bash
+collie -r=/Users/googege/Desktop/test -o=/Users/googege/Desktop/app -w=0 -q=80
 ```
 
 
