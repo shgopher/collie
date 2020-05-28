@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
-<a href="https://www.bilibili.com/video/BV1za4y1e7U9/">视频演示</a>| 
+<a href="https://www.bilibili.com/video/BV1za4y1e7U9/">视频演示</a> | 
 <a href="https://www.youtube.com/watch?v=3nDGifbqdug">Video presentation</a>
 </p>
 <p align="center">
