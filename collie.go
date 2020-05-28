@@ -17,17 +17,19 @@ import (
 	"strings"
 	"sync"
 )
+
 var (
-	root string
+	root    string
 	outPath string
-	width int
+	width   int
 	quality int
 )
-func init(){
-	flag.StringVar(&root,"root",".","root path")
-	flag.StringVar(&outPath,"outPath",".","out put dir")
-	flag.IntVar(&width,"width",0,"picture widh")
-	flag.IntVar(&quality,"quality",75,"quality of the picture")
+
+func init() {
+	flag.StringVar(&root, "r", "./test", "root path")
+	flag.StringVar(&outPath, "o", ".", "out put dir")
+	flag.IntVar(&width, "w", 0, "picture widh")
+	flag.IntVar(&quality, "q", 75, "quality of the picture")
 }
 func main() {
 	fmt.Println("collie is runing...🚀")
@@ -43,7 +45,7 @@ func retrieveData(root string) (value chan string, err chan error) {
 			if err != nil {
 				return err
 			}
-			// if the file is noe regular, it mean the file is done,you should return .
+			// if the file is noe regular, it mean the file is done,you should return
 			if !info.Mode().IsRegular() {
 				return nil
 			}
@@ -79,37 +81,26 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg.Wait()
 		close(reader)
 	}()
-	ccc := make(chan bool, 20)
 	wg1 := new(sync.WaitGroup)
 	wg1.Add(20)
 	for i := 0; i < 20; i++ {
 		go func() {
 			defer wg1.Done()
-			for {
-				select {
-				case r, ok := <-reader:
-					if ok {
-						v,ok := r.(*os.File)
-						if !ok {
-							glog.Errorln("not file.")
-						}
-						_,name1 := filepath.Split(v.Name())
-						name := findName(name1)
-						if name == "" && name1 != ".DS_Store"{
-							fmt.Println(name1)
-							glog.Errorln("not file..")
-						}
-						img, err := isJpg(name,r)
-						if err != nil {
-							glog.Errorln(err)
-						} else {
-							b <- img
-						}
-					} else {
-						ccc <- true
-					}
-				case <-ccc:
-					return
+			for r := range reader {
+				v, ok := r.(*os.File)
+				if !ok {
+					glog.Errorln("not photo")
+				}
+				_, name1 := filepath.Split(v.Name())
+				name := findName(name1)
+				if name == "" && name1 != ".DS_Store" {
+					glog.Errorln("not file.")
+				}
+				img, err := isJpg(name, r)
+				if err != nil {
+					glog.Errorln(err)
+				} else {
+					b <- img
 				}
 			}
 		}()
@@ -118,23 +109,13 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg1.Wait()
 		close(b)
 	}()
-	ddd := make(chan bool, 20)
 	wg2 := new(sync.WaitGroup)
 	wg2.Add(20)
 	for i := 0; i < 20; i++ {
 		go func() {
 			defer wg2.Done()
-			for {
-				select {
-				case i, ok := <-b:
-					if ok {
-						c <- resize.Resize(uint(wid), 0, i, resize.NearestNeighbor)
-					} else {
-						ddd <- true
-					}
-				case <-ddd:
-					return
-				}
+			for i := range b {
+				c <- resize.Resize(uint(wid), 0, i, resize.NearestNeighbor)
 			}
 		}()
 	}
@@ -142,32 +123,22 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg2.Wait()
 		close(c)
 	}()
-	ttt := make(chan bool, 20)
 	wg3 := new(sync.WaitGroup)
 	wg3.Add(20)
 	for i := 0; i < 20; i++ {
 		go func() {
 			defer wg3.Done()
-			for {
-				select {
-				case i, ok := <-c:
-					if ok {
-						file, err := os.Create(outputFile + "/" + onlyID() + ".jpeg")
-						if err != nil {
-							glog.Error(err)
-						}
-						if q < 20 {
-							q = 20
-						}
-						jpeg.Encode(file, i, &jpeg.Options{
-							q,
-						})
-					} else {
-						ttt <- true
-					}
-				case <-ttt:
-					return
+			for i := range c {
+				file, err := os.Create(outputFile + "/" + onlyID() + ".jpeg")
+				if err != nil {
+					glog.Error(err)
 				}
+				if q < 20 {
+					q = 20
+				}
+				jpeg.Encode(file, i, &jpeg.Options{
+					q,
+				})
 			}
 		}()
 	}
@@ -194,27 +165,27 @@ func onlyID1() string {
 	glog.V(1)
 	return u.String()
 }
-func findName(name string)string {
+func findName(name string) string {
 	v := name[len(name)-4:]
 	v1 := name[len(name)-3:]
-	if v == "jpeg"{
+	if v == "jpeg" {
 		return v
 	}
-	if v1 == "jpg"|| v1 == "png" || v1 == "gif" {
+	if v1 == "jpg" || v1 == "png" || v1 == "gif" {
 		return v1
 	}
 	return ""
 }
-func isJpg(name string,r io.Reader,)(image.Image,error){
+func isJpg(name string, r io.Reader) (image.Image, error) {
 	name = strings.ToLower(name)
 	switch name {
-	case "jpeg","jpg":
+	case "jpeg", "jpg":
 		return jpeg.Decode(r)
 	case "png":
 		return png.Decode(r)
 	case "gif":
 		return gif.Decode(r)
 	default:
-		return nil,fmt.Errorf("just can use jpeg jpg png and gif")
+		return nil, fmt.Errorf("just can use jpeg jpg png and gif")
 	}
 }
