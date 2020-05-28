@@ -30,8 +30,10 @@ func init() {
 	flag.StringVar(&outPath, "o", ".", "out put dir")
 	flag.IntVar(&width, "w", 0, "picture widh")
 	flag.IntVar(&quality, "q", 75, "quality of the picture")
+	flag.Parse()
 }
 func main() {
+	fmt.Println(root, outPath, width, quality)
 	fmt.Println("collie is runing...🚀")
 	DataProcessing(root, outPath, width, quality)
 }
@@ -59,19 +61,19 @@ func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	for v := range file {
 		fi, err := os.Open(v)
 		if err != nil {
-			glog.Errorln(err)
-			continue
+			fmt.Println(err)
+		} else {
+			value <- fi
 		}
-		value <- fi
 	}
 	wg.Done()
 }
 func DataProcessing(root string, outputFile string, wid int, q int) {
-
 	reader := make(chan io.Reader)
 	b := make(chan image.Image)
 	c := make(chan image.Image)
 	value, err := retrieveData(root)
+	//
 	wg := new(sync.WaitGroup)
 	wg.Add(20)
 	for i := 0; i < 20; i++ {
@@ -81,6 +83,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg.Wait()
 		close(reader)
 	}()
+	//
 	wg1 := new(sync.WaitGroup)
 	wg1.Add(20)
 	for i := 0; i < 20; i++ {
@@ -109,6 +112,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg1.Wait()
 		close(b)
 	}()
+	//
 	wg2 := new(sync.WaitGroup)
 	wg2.Add(20)
 	for i := 0; i < 20; i++ {
@@ -123,6 +127,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		wg2.Wait()
 		close(c)
 	}()
+	//
 	wg3 := new(sync.WaitGroup)
 	wg3.Add(20)
 	for i := 0; i < 20; i++ {
@@ -131,7 +136,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 			for i := range c {
 				file, err := os.Create(outputFile + "/" + onlyID() + ".jpeg")
 				if err != nil {
-					glog.Error(err)
+					fmt.Println(err)
 				}
 				if q < 20 {
 					q = 20
@@ -142,9 +147,11 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 			}
 		}()
 	}
+	//
 	if er := <-err; er != nil {
-		glog.Error("错误over：", err)
+		fmt.Println(er)
 	}
+	//
 	wg3.Wait()
 }
 
@@ -152,7 +159,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 func onlyID() string {
 	snow, err := id.NewSnowFlake(1)
 	if err != nil {
-		glog.Error(err)
+		fmt.Println(err)
 	}
 	glog.V(1).Info("use snowFlake")
 	return strconv.FormatInt(snow.GetID(), 10)
@@ -162,7 +169,6 @@ func onlyID1() string {
 	if err != nil {
 		glog.Error(err)
 	}
-	glog.V(1)
 	return u.String()
 }
 func findName(name string) string {
