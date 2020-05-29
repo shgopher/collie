@@ -78,6 +78,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	b := make(chan image.Image)
 	c := make(chan image.Image)
 	value, err := retrieveData(root)
+	// ce
+	fmt.Println(len(value))
 	//
 	wg := new(sync.WaitGroup)
 	wg.Add(20)
@@ -139,16 +141,16 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 		go func() {
 			defer wg3.Done()
 			for i := range c {
-				file, err := os.Create(outputFile + "/" + onlyID() + ".jpeg")
+				file, err := os.Create(outputFile + "/" + onlyID1() + ".jpeg")
 				if err != nil {
 					fmt.Println(err)
 				}
 				if q < 20 {
 					q = 20
 				}
-				jpeg.Encode(file, i, &jpeg.Options{
-					q,
-				})
+				if err := jpeg.Encode(file, i, &jpeg.Options{q}); err != nil {
+					glog.Errorln("photo creating process is error:", err)
+				}
 			}
 		}()
 	}
