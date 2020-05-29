@@ -80,8 +80,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	value, err := retrieveData(root)
 	//
 	wg := new(sync.WaitGroup)
-	wg.Add(20)
-	for i := 0; i < 20; i++ {
+	wg.Add(32)
+	for i := 0; i < 32; i++ {
 		mark(i,"Geting the path")
 		go ReceiveData(value, reader, wg)
 	}
@@ -91,8 +91,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	}()
 	//
 	wg1 := new(sync.WaitGroup)
-	wg1.Add(20)
-	for i := 0; i < 20; i++ {
+	wg1.Add(32)
+	for i := 0; i < 32; i++ {
 		go func(i int) {
 			defer wg1.Done()
 			mark(i,"decoding")
@@ -121,8 +121,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	}()
 	//
 	wg2 := new(sync.WaitGroup)
-	wg2.Add(20)
-	for i := 0; i < 20; i++ {
+	wg2.Add(32)
+	for i := 0; i < 32; i++ {
 		go func(i int) {
 			mark(i,"compression")
 			defer wg2.Done()
@@ -137,8 +137,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	}()
 	//
 	wg3 := new(sync.WaitGroup)
-	wg3.Add(20)
-	for i := 0; i < 20; i++ {
+	wg3.Add(32)
+	for i := 0; i < 32; i++ {
 		go func(i int) {
 			mark(i,"Creating a new photo processing")
 			defer wg3.Done()
@@ -210,3 +210,4 @@ func mark(i int,name string){
 		fmt.Printf("%s is runing...\n",name)
 	}
 }
+
