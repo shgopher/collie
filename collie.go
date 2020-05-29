@@ -82,6 +82,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg := new(sync.WaitGroup)
 	wg.Add(20)
 	for i := 0; i < 20; i++ {
+		mark(i,"Geting the path")
 		go ReceiveData(value, reader, wg)
 	}
 	go func() {
@@ -92,8 +93,9 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg1 := new(sync.WaitGroup)
 	wg1.Add(20)
 	for i := 0; i < 20; i++ {
-		go func() {
+		go func(i int) {
 			defer wg1.Done()
+			mark(i,"decoding")
 			for r := range reader {
 				v, ok := r.(*os.File)
 				if !ok {
@@ -111,7 +113,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 					b <- img
 				}
 			}
-		}()
+		}(i)
 	}
 	go func() {
 		wg1.Wait()
@@ -121,12 +123,13 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg2 := new(sync.WaitGroup)
 	wg2.Add(20)
 	for i := 0; i < 20; i++ {
-		go func() {
+		go func(i int) {
+			mark(i,"compression")
 			defer wg2.Done()
 			for i := range b {
 				c <- resize.Resize(uint(wid), 0, i, resize.NearestNeighbor)
 			}
-		}()
+		}(i)
 	}
 	go func() {
 		wg2.Wait()
@@ -136,7 +139,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg3 := new(sync.WaitGroup)
 	wg3.Add(20)
 	for i := 0; i < 20; i++ {
-		go func() {
+		go func(i int) {
+			mark(i,"Creating a new photo processing")
 			defer wg3.Done()
 			for i := range c {
 				file, err := os.Create(outputFile + "/" + onlyID1() + ".jpeg")
@@ -150,7 +154,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 					glog.Errorln("photo creating process is error:", err)
 				}
 			}
-		}()
+		}(i)
 	}
 	//
 	if er := <-err; er != nil {
@@ -198,5 +202,11 @@ func isJpg(name string, r io.Reader) (image.Image, error) {
 		return gif.Decode(r)
 	default:
 		return nil, fmt.Errorf("just can use jpeg jpg png and gif")
+	}
+}
+
+func mark(i int,name string){
+	if i == 0 {
+		fmt.Printf("%s is runing...\n",name)
 	}
 }
