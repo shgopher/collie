@@ -78,8 +78,6 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	b := make(chan image.Image)
 	c := make(chan image.Image)
 	value, err := retrieveData(root)
-	// ce
-	fmt.Println(len(value))
 	//
 	wg := new(sync.WaitGroup)
 	wg.Add(20)
