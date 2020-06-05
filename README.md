@@ -22,7 +22,7 @@
 </p> 
 
 <p align="center">
-    Learn more: <a href="https://github.com/googege" target="_blank">googege</a>
+    Learn more: <a href="https://github.com/shgopher" target="_blank">googege</a>
 </p>
 
 ### Features
