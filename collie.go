@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/golang/glog"
 	"github.com/googege/gotools/id"
+	"github.com/googege/collie/mem"
 	"github.com/nfnt/resize"
 	"image"
 	"image/gif"
@@ -16,6 +17,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 var (
@@ -62,6 +64,14 @@ func retrieveData(root string) (value chan string, err chan error) {
 // get file send to a chan.
 func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	for v := range file {
+		dif,err := mem.MemDifference()
+		if err != nil {
+			fmt.Println(err)
+		}
+		if dif > 0.3 {
+			time.Sleep(time.Second/2)
+			fmt.Println("waiting for mem less.")
+		}
 		fi, err := os.Open(v)
 		if err != nil {
 			fmt.Println(err)
