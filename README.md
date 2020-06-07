@@ -30,6 +30,7 @@
 
 - 🚲 **Easy**: you just need install it to the terminal and you can get started quickly.
 ### How to use
+#### use go
 ```go
 collie -r -o - w -q
 ```
@@ -46,6 +47,12 @@ go get -u github.com/googege/collie
 //
 collie -r /Users/googege/Desktop/test -o /Users/googege/Desktop/app -w 0 -q 30
 ```
+#### use binary file
+[download binary file](https://github.com/shgopher/collie/releases)
+- when you use windows you should open windows command and use ` collie.exe -r [your resource path] -o [your out put path] -q [the quality]`
+
+- in mac or  linux open your bash or zsh command, use  `collie_[linux/macos] -r resource path -o output path`
+
 suport png jpg jpeg and gif ,and all of the output is jpeg
 ## HERE
 
