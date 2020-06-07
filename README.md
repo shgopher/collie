@@ -44,7 +44,7 @@ like:
 // add "gopath/bin" to PATH. 
 go get -u github.com/googege/collie 
 //
-collie -r /Users/googege/Desktop/test -o /Users/googege/Desktop/app -w 0 -q 80
+collie -r /Users/googege/Desktop/test -o /Users/googege/Desktop/app -w 0 -q 30
 ```
 suport png jpg jpeg and gif ,and all of the output is jpeg
 ## HERE
