@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/golang/glog"
-	"github.com/googege/gotools/id"
 	"github.com/googege/collie/mem"
+	"github.com/googege/gotools/id"
 	"github.com/nfnt/resize"
 	"image"
 	"image/gif"
@@ -64,12 +64,12 @@ func retrieveData(root string) (value chan string, err chan error) {
 // get file send to a chan.
 func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	for v := range file {
-		dif,err := mem.MemDifference()
+		dif, err := mem.MemDifference()
 		if err != nil {
 			fmt.Println(err)
 		}
-		if dif > 0.3 {
-			time.Sleep(time.Second/2)
+		if dif > 0.2 {
+			time.Sleep(time.Second >> 1)
 			fmt.Println("waiting for mem less.")
 		}
 		fi, err := os.Open(v)
@@ -92,7 +92,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg := new(sync.WaitGroup)
 	wg.Add(4)
 	for i := 0; i < 4; i++ {
-		mark(i,"Geting the path")
+		mark(i, "Geting the path")
 		go ReceiveData(value, reader, wg)
 	}
 	go func() {
@@ -105,7 +105,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	for i := 0; i < 32; i++ {
 		go func(i int) {
 			defer wg1.Done()
-			mark(i,"decoding")
+			mark(i, "decoding")
 			for r := range reader {
 				v, ok := r.(*os.File)
 				if !ok {
@@ -134,7 +134,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg2.Add(32)
 	for i := 0; i < 32; i++ {
 		go func(i int) {
-			mark(i,"compression")
+			mark(i, "compression")
 			defer wg2.Done()
 			for i := range b {
 				c <- resize.Resize(uint(wid), 0, i, resize.NearestNeighbor)
@@ -150,7 +150,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg3.Add(32)
 	for i := 0; i < 32; i++ {
 		go func(i int) {
-			mark(i,"Creating a new photo processing")
+			mark(i, "Creating a new photo processing")
 			defer wg3.Done()
 			for i := range c {
 				file, err := os.Create(outputFile + "/" + onlyID1() + ".jpeg")
@@ -215,9 +215,8 @@ func isJpg(name string, r io.Reader) (image.Image, error) {
 	}
 }
 
-func mark(i int,name string){
+func mark(i int, name string) {
 	if i == 0 {
-		fmt.Printf("%s is runing...\n",name)
+		fmt.Printf("%s is runing...\n", name)
 	}
 }
-
