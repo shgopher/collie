@@ -90,8 +90,8 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	value, err := retrieveData(root)
 	//
 	wg := new(sync.WaitGroup)
-	wg.Add(4)
-	for i := 0; i < 4; i++ {
+	wg.Add(2)
+	for i := 0; i < 2; i++ {
 		mark(i, "Geting the path")
 		go ReceiveData(value, reader, wg)
 	}
