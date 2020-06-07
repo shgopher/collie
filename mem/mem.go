@@ -18,7 +18,9 @@ func init(){
 	o.Do(func() {
 		var err error
 		oldMem,err = memPercent()
-		glog.Error(err)
+		if err != nil {
+			glog.Error(err)
+		}
 	})
 }
 // return the difference between the old mem and the new one.
