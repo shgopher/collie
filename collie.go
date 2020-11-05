@@ -192,6 +192,7 @@ func onlyID1() string {
 	return u.String()
 }
 func findName(name string) string {
+        name = strings.ToLower(name)
 	v := name[len(name)-4:]
 	v1 := name[len(name)-3:]
 	if v == "jpeg" {
@@ -203,7 +204,6 @@ func findName(name string) string {
 	return ""
 }
 func isJpg(name string, r io.Reader) (image.Image, error) {
-	name = strings.ToLower(name)
 	switch name {
 	case "jpeg", "jpg":
 		return jpeg.Decode(r)
