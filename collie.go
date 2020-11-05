@@ -3,10 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/golang/glog"
-	"github.com/googege/collie/mem"
-	"github.com/googege/gotools/id"
-	"github.com/nfnt/resize"
 	"image"
 	"image/gif"
 	"image/jpeg"
@@ -18,6 +14,11 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/golang/glog"
+	"github.com/googege/collie/mem"
+	"github.com/googege/gotools/id"
+	"github.com/nfnt/resize"
 )
 
 var (
@@ -114,7 +115,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				_, name1 := filepath.Split(v.Name())
 				name := findName(name1)
 				if name == "" && name1 != ".DS_Store" {
-					glog.Errorln("not file.")
+					glog.Errorln("not file,the file name is ", name)
 				}
 				img, err := isJpg(name, r)
 				if err != nil {
@@ -168,7 +169,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	}
 	//
 	if er := <-err; er != nil {
-		fmt.Println(er)
+		fmt.Println("can not find file ,or no order to find", er)
 	}
 	//
 	wg3.Wait()
