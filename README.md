@@ -59,7 +59,6 @@ suport png jpg jpeg and gif ,and all of the output is jpeg
 
 |项目|介绍|
 |:---:|:---:|
-|对我的赞助|![p](https://raw.githubusercontent.com/basicExploration/Demos/master/donate.png)|
 |便宜服务器推荐|[阿里云](https://www.aliyun.com/minisite/goods?userCode=ol87kpmz)，[梯子服务器](https://app.cloudcone.com/?ref=2525):支持支付宝|
 |微信公众号|科科人神|
 |我的社交平台|[b站](https://space.bilibili.com/23170151)|
