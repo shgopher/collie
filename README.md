@@ -25,40 +25,33 @@
     Learn more: <a href="https://github.com/shgopher" target="_blank">shgopher</a>
 </p>
 
-### Features
-- 🚄 **Fast**: leveraging go's high concurrency capabilities, this tool has unparalleled speed.
 
-- 🚲 **Easy**: you just need install it to the terminal and you can get started quickly.
-### How to use
-#### use go
-```go
-collie -r -o - w -q -n
-```
+### 下载地址
+[download binary file](https://github.com/shgopher/collie/releases)
+
+### 如何使用
+
 -n int
 是否输出跟源文件相同的名称，0：是，1：不是，如果不是，系统会给出一个随机代码，默认是输出相同的名字
+
 -o string
 输出的路径 (default ".")
+
 -q int
 输出的照片质量，范围是从1 - 100 (default 75)
+
 -r string
 指定的输入路径，路径是指的图片所处的文件夹，文件夹中还有文件夹不影响，系统会找到你指定文件夹中的所以照片，包括文件夹中的文件夹里的图片 (default "./test")
+
 -w int
 输出的照片尺寸，0是跟之前一样大，单位是px
 
-```go
-// add "gopath/bin" to PATH. 
-go get -u github.com/googege/collie 
-//
-collie -r /Users/googege/Desktop/test -o /Users/googege/Desktop/app -w 0 -q 30
-```
-#### use binary file
-[download binary file](https://github.com/shgopher/collie/releases)
-> when you download the binary file ,do not forget `chmod +x ./collie_macos`
-- when you use windows you should open windows command and use ` collie.exe -r [your resource path] -o [your out put path] -q [the quality]`
+> 如果权限不足，记得改权限 `chmod +x ./collie_macos`
+- 用 windows 打开windows的命令行这样使用： ` collie.exe -r [your resource path] -o [your out put path] -q [the quality]`
 
-- in mac or  linux open your bash or zsh command, use  `collie_[linux/macos] -r resource path -o output path`
+- Mac和Linux： `collie_[linux/macos] -r resource path -o output path`
 
-suport png jpg jpeg and gif ,and all of the output is jpeg
+支持 png jpg jpeg and gif ,所有格式都按照jpeg来输出，所以GIF最好别用。因为输出的是第一张图
 ## HERE
 
 |项目|介绍|
