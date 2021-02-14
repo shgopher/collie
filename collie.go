@@ -22,23 +22,16 @@ import (
 )
 
 var (
-	root    string
-	outPath string
-	width   int
-	quality int
+	root      string // 输入
+	outPath   string // 输出
+	outPutYes int// 是否跟源文件保持一致的名称
+	width     int//宽度
+	quality   int// 质量
 )
 
-func init() {
-	flag.StringVar(&root, "r", "./test", "root path")
-	flag.StringVar(&outPath, "o", ".", "out put dir")
-	flag.IntVar(&width, "w", 0, "picture widh")
-	flag.IntVar(&quality, "q", 75, "quality of the picture")
-	flag.Parse()
-}
-func main() {
-	fmt.Println("collie is runing...🚀")
-	DataProcessing(root, outPath, width, quality)
-	fmt.Println("collie is over ☕️")
+type XC struct {
+	img  image.Image
+	name string
 }
 
 // get file's path
@@ -86,14 +79,14 @@ func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 // resize and create a new photo with only id name.
 func DataProcessing(root string, outputFile string, wid int, q int) {
 	reader := make(chan io.Reader)
-	b := make(chan image.Image)
-	c := make(chan image.Image)
+	b := make(chan *XC)
+	c := make(chan *XC)
 	value, err := retrieveData(root)
 	//
 	wg := new(sync.WaitGroup)
 	wg.Add(2)
 	for i := 0; i < 2; i++ {
-		mark(i, "Geting the path")
+		mark(i, "获取文件路径：")
 		go ReceiveData(value, reader, wg)
 	}
 	go func() {
@@ -106,13 +99,14 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	for i := 0; i < 32; i++ {
 		go func(i int) {
 			defer wg1.Done()
-			mark(i, "decoding")
+			mark(i, "正在解析")
 			for r := range reader {
 				v, ok := r.(*os.File)
 				if !ok {
 					glog.Errorln("not photo")
 				}
 				_, name1 := filepath.Split(v.Name())
+				// name1 是文件的名字，name是后缀
 				name := findName(name1)
 				if name == "" && name1 != ".DS_Store" {
 					glog.Errorln("not file,the file name is ", name)
@@ -121,7 +115,10 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				if err != nil {
 					glog.Errorln(err)
 				} else {
-					b <- img
+					b <- &XC{
+						img:  img,
+						name: name1,
+					}
 				}
 			}
 		}(i)
@@ -135,10 +132,11 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg2.Add(32)
 	for i := 0; i < 32; i++ {
 		go func(i int) {
-			mark(i, "compression")
+			mark(i, "正在压缩")
 			defer wg2.Done()
 			for i := range b {
-				c <- resize.Resize(uint(wid), 0, i, resize.NearestNeighbor)
+				i.img = resize.Resize(uint(wid), 0, i.img, resize.NearestNeighbor)
+				c <- i
 			}
 		}(i)
 	}
@@ -151,17 +149,26 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	wg3.Add(32)
 	for i := 0; i < 32; i++ {
 		go func(i int) {
-			mark(i, "Creating a new photo processing")
+			mark(i, "正在创建文件：")
 			defer wg3.Done()
 			for i := range c {
-				file, err := os.Create(outputFile + "/" + onlyID1() + ".jpeg")
+				defaultName := ""
+				if outPutYes == 0 {
+					defaultName = i.name
+				}else {
+					defaultName = onlyID1()+".jpeg"
+				}
+				file, err := os.Create(outputFile + "/" + defaultName)
+				defer file.Close()
+				stat,_ := file.Stat()
+				fmt.Printf("成功输出文件:%s\n",stat.Name())
 				if err != nil {
 					fmt.Println(err)
 				}
 				if q < 20 {
 					q = 20
 				}
-				if err := jpeg.Encode(file, i, &jpeg.Options{q}); err != nil {
+				if err := jpeg.Encode(file, i.img, &jpeg.Options{q}); err != nil {
 					glog.Errorln("photo creating process is error:", err)
 				}
 			}
@@ -192,7 +199,7 @@ func onlyID1() string {
 	return u.String()
 }
 func findName(name string) string {
-        name = strings.ToLower(name)
+	name = strings.ToLower(name)
 	v := name[len(name)-4:]
 	v1 := name[len(name)-3:]
 	if v == "jpeg" {
@@ -212,12 +219,28 @@ func isJpg(name string, r io.Reader) (image.Image, error) {
 	case "gif":
 		return gif.Decode(r)
 	default:
-		return nil, fmt.Errorf("just can use jpeg jpg png and gif")
+		return nil, fmt.Errorf("本程序只能压缩 jpg jpeg png 和gif，并且最后输出的都是jpeg文件，望周知")
 	}
 }
 
 func mark(i int, name string) {
 	if i == 0 {
-		fmt.Printf("%s is runing...\n", name)
+		fmt.Printf("%s\n", name)
 	}
+}
+
+func init() {
+	flag.StringVar(&root, "r", "./test", "指定的输入路径，路径是指的图片所处的文件夹，文件夹中还有文件夹不影响，系统会找到你指定文件夹中的所以照片，包括文件夹中的文件夹里的图片")
+	flag.StringVar(&outPath, "o", ".", "输出的路径")
+	flag.IntVar(&width, "w", 0, "输出的照片尺寸，0是跟之前一样大，单位是px")
+	flag.IntVar(&quality, "q", 75, "输出的照片质量，范围是从1 - 100")
+	flag.IntVar(&outPutYes, "n", 0, "是否输出跟源文件相同的名称，0：是，1：不是，如果不是，系统会给出一个随机代码，默认是输出相同的名字")
+	flag.Parse()
+}
+func main() {
+	fmt.Println("声明：本程序来自GitHub：shgopher,欢迎关注公众号：科科人神；\n免费软件，如果使用期间出现任何后果，本软件不承担任何责任谢谢\n")
+	fmt.Println("程序正式开始运行 🚀🚀🚀")
+	DataProcessing(root, outPath, width, quality)
+	fmt.Println("运行结束 ☕️ ☕ ☕\n")
+	fmt.Printf("您可以打开%s去查看已经压缩好的文件\n",outPath)
 }

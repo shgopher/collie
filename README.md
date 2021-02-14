@@ -32,14 +32,18 @@
 ### How to use
 #### use go
 ```go
-collie -r -o - w -q
+collie -r -o - w -q -n
 ```
-- `-r` the resource photos dir path
-- `-o` the output dir path
-- `-w` the result photos' width ,or you can set 0,you will get the same width with the old one.
-- `-q` the quality of the output photos from 20 to 100.
-
-like:
+-n int
+是否输出跟源文件相同的名称，0：是，1：不是，如果不是，系统会给出一个随机代码，默认是输出相同的名字
+-o string
+输出的路径 (default ".")
+-q int
+输出的照片质量，范围是从1 - 100 (default 75)
+-r string
+指定的输入路径，路径是指的图片所处的文件夹，文件夹中还有文件夹不影响，系统会找到你指定文件夹中的所以照片，包括文件夹中的文件夹里的图片 (default "./test")
+-w int
+输出的照片尺寸，0是跟之前一样大，单位是px
 
 ```go
 // add "gopath/bin" to PATH. 
