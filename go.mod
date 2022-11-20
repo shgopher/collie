@@ -1,4 +1,4 @@
-module github.com/googege/collie
+module github.com/shgopher/collie
 
 go 1.14
 
