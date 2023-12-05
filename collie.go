@@ -24,9 +24,9 @@ import (
 var (
 	root      string // 输入
 	outPath   string // 输出
-	outPutYes int// 是否跟源文件保持一致的名称
-	width     int//宽度
-	quality   int// 质量
+	outPutYes int    // 是否跟源文件保持一致的名称
+	width     int    //宽度
+	quality   int    // 质量
 )
 
 type XC struct {
@@ -113,7 +113,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				}
 				img, err := isJpg(name, r)
 				if err != nil {
-					glog.Errorln(err)
+					glog.Errorln("无法读取文件：", name1, err)
 				} else {
 					b <- &XC{
 						img:  img,
@@ -155,13 +155,13 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				defaultName := ""
 				if outPutYes == 0 {
 					defaultName = i.name
-				}else {
-					defaultName = onlyID1()+".jpeg"
+				} else {
+					defaultName = onlyID1() + ".jpeg"
 				}
 				file, err := os.Create(outputFile + "/" + defaultName)
 				defer file.Close()
-				stat,_ := file.Stat()
-				fmt.Printf("成功输出文件:%s\n",stat.Name())
+				stat, _ := file.Stat()
+				fmt.Printf("成功输出文件:%s\n", stat.Name())
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -242,5 +242,5 @@ func main() {
 	fmt.Println("程序正式开始运行 🚀🚀🚀")
 	DataProcessing(root, outPath, width, quality)
 	fmt.Println("运行结束 ☕️ ☕ ☕\n")
-	fmt.Printf("您可以打开%s去查看已经压缩好的文件\n",outPath)
+	fmt.Printf("您可以打开%s去查看已经压缩好的文件\n", outPath)
 }

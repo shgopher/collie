@@ -1,14 +1,18 @@
 module github.com/shgopher/collie
 
-go 1.14
+go 1.21.4
 
 require (
-	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
-	github.com/go-ole/go-ole v1.2.4 // indirect
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
+	github.com/golang/glog v1.2.0
+	github.com/googege/collie v0.5.0
 	github.com/googege/gotools v0.3.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/shirou/gopsutil v2.20.5+incompatible
-	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
+	github.com/shirou/gopsutil v3.21.11+incompatible
+)
+
+require (
+	github.com/go-ole/go-ole v1.3.0 // indirect
+	github.com/google/uuid v1.4.0 // indirect
+	github.com/yusufpapurcu/wmi v1.2.3 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 )
