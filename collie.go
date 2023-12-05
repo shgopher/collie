@@ -29,7 +29,7 @@ var (
 	quality   int    // 质量
 )
 
-type XC struct {
+type xc struct {
 	img  image.Image
 	name string
 }
@@ -56,7 +56,7 @@ func retrieveData(root string) (value chan string, err chan error) {
 }
 
 // get file send to a chan.
-func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
+func receiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 	for v := range file {
 		dif, err := mem.MemDifference()
 		if err != nil {
@@ -79,15 +79,15 @@ func ReceiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
 // resize and create a new photo with only id name.
 func DataProcessing(root string, outputFile string, wid int, q int) {
 	reader := make(chan io.Reader)
-	b := make(chan *XC)
-	c := make(chan *XC)
+	b := make(chan *xc)
+	c := make(chan *xc)
 	value, err := retrieveData(root)
 	//
 	wg := new(sync.WaitGroup)
 	wg.Add(2)
 	for i := 0; i < 2; i++ {
 		mark(i, "获取文件路径：")
-		go ReceiveData(value, reader, wg)
+		go receiveData(value, reader, wg)
 	}
 	go func() {
 		wg.Wait()
@@ -115,7 +115,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				if err != nil {
 					glog.Errorln("无法读取文件：", name1, err)
 				} else {
-					b <- &XC{
+					b <- &xc{
 						img:  img,
 						name: name1,
 					}
