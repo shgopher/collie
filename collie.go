@@ -22,11 +22,12 @@ import (
 )
 
 var (
-	root      string // 输入
-	outPath   string // 输出
-	outPutYes int    // 是否跟源文件保持一致的名称
-	width     int    //宽度
-	quality   int    // 质量
+	root       string // 输入
+	outPath    string // 输出
+	outPutYes  int    // 是否跟源文件保持一致的名称
+	width      int    //宽度
+	quality    int    // 质量
+	errorNames []string
 )
 
 type xc struct {
@@ -56,24 +57,25 @@ func retrieveData(root string) (value chan string, err chan error) {
 }
 
 // get file send to a chan.
-func receiveData(file chan string, value chan io.Reader, wg *sync.WaitGroup) {
+func receiveData(file chan string, value chan io.Reader) {
 	for v := range file {
 		dif, err := mem.MemDifference()
 		if err != nil {
 			fmt.Println(err)
 		}
-		if dif > 0.2 {
-			time.Sleep(time.Second >> 1)
+		if dif > 0.1 {
+			time.Sleep(time.Second)
 			fmt.Println("waiting for mem less.")
 		}
 		fi, err := os.Open(v)
+		time.Sleep(time.Second >> 3)
 		if err != nil {
 			fmt.Println(err)
 		} else {
 			value <- fi
 		}
 	}
-	wg.Done()
+	close(value)
 }
 
 // resize and create a new photo with only id name.
@@ -82,18 +84,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 	b := make(chan *xc)
 	c := make(chan *xc)
 	value, err := retrieveData(root)
-	//
-	wg := new(sync.WaitGroup)
-	wg.Add(2)
-	for i := 0; i < 2; i++ {
-		mark(i, "获取文件路径：")
-		go receiveData(value, reader, wg)
-	}
-	go func() {
-		wg.Wait()
-		close(reader)
-	}()
-	//
+	go receiveData(value, reader)
 	wg1 := new(sync.WaitGroup)
 	wg1.Add(32)
 	for i := 0; i < 32; i++ {
@@ -114,6 +105,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				img, err := isJpg(name, r)
 				if err != nil {
 					glog.Errorln("无法读取文件：", name1, err)
+					errorNames = append(errorNames, name1)
 				} else {
 					b <- &xc{
 						img:  img,
@@ -240,7 +232,10 @@ func init() {
 func main() {
 	fmt.Println("声明：本程序来自GitHub：shgopher,欢迎关注公众号：科科人神；\n免费软件，如果使用期间出现任何后果，本软件不承担任何责任谢谢\n")
 	fmt.Println("程序正式开始运行 🚀🚀🚀")
+	before := time.Now()
 	DataProcessing(root, outPath, width, quality)
 	fmt.Println("运行结束 ☕️ ☕ ☕\n")
 	fmt.Printf("您可以打开%s去查看已经压缩好的文件\n", outPath)
+	ela := time.Since(before)
+	fmt.Println("本次一共花费了：", int(ela.Seconds()), "秒", "失败的文件是", errorNames)
 }
