@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/googege/collie">
-    <img width="20%" alt="github.com/googege/collie" src="./collie.png">
+    <img width="20%" alt="github.com/googege/collie" src="./logo.jpg">
   </a>
 </p>
 <p align="center">
