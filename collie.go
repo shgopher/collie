@@ -103,6 +103,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 					glog.Errorln("not file,the file name is ", name)
 				}
 				img, err := isJpg(name, r)
+
 				if err != nil {
 					glog.Errorln("无法读取文件：", name1, err)
 					errorNames = append(errorNames, name1)
@@ -151,11 +152,11 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 					defaultName = onlyID1() + ".jpeg"
 				}
 				file, err := os.Create(outputFile + "/" + defaultName)
-				defer file.Close()
-				stat, _ := file.Stat()
-				fmt.Printf("成功输出文件:%s\n", stat.Name())
+				stat, err := file.Stat()
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println("file.Stat:", err)
+				} else {
+					fmt.Printf("成功输出文件:%s\n", stat.Name())
 				}
 				if q < 20 {
 					q = 20
@@ -163,6 +164,7 @@ func DataProcessing(root string, outputFile string, wid int, q int) {
 				if err := jpeg.Encode(file, i.img, &jpeg.Options{q}); err != nil {
 					glog.Errorln("photo creating process is error:", err)
 				}
+				file.Close()
 			}
 		}(i)
 	}
@@ -203,16 +205,34 @@ func findName(name string) string {
 	return ""
 }
 func isJpg(name string, r io.Reader) (image.Image, error) {
+
 	switch name {
 	case "jpeg", "jpg":
+		v, ok := r.(*os.File)
+		if ok {
+			defer v.Close()
+		}
 		return jpeg.Decode(r)
 	case "png":
+		v, ok := r.(*os.File)
+		if ok {
+			defer v.Close()
+		}
 		return png.Decode(r)
 	case "gif":
+		v, ok := r.(*os.File)
+		if ok {
+			defer v.Close()
+		}
 		return gif.Decode(r)
 	default:
+		v, ok := r.(*os.File)
+		if ok {
+			defer v.Close()
+		}
 		return nil, fmt.Errorf("本程序只能压缩 jpg jpeg png 和gif，并且最后输出的都是jpeg文件，望周知")
 	}
+
 }
 
 func mark(i int, name string) {
