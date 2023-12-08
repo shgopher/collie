@@ -205,34 +205,20 @@ func findName(name string) string {
 	return ""
 }
 func isJpg(name string, r io.Reader) (image.Image, error) {
-
+	v, ok := r.(*os.File)
+	if ok {
+		defer v.Close()
+	}
 	switch name {
 	case "jpeg", "jpg":
-		v, ok := r.(*os.File)
-		if ok {
-			defer v.Close()
-		}
 		return jpeg.Decode(r)
 	case "png":
-		v, ok := r.(*os.File)
-		if ok {
-			defer v.Close()
-		}
 		return png.Decode(r)
 	case "gif":
-		v, ok := r.(*os.File)
-		if ok {
-			defer v.Close()
-		}
 		return gif.Decode(r)
 	default:
-		v, ok := r.(*os.File)
-		if ok {
-			defer v.Close()
-		}
 		return nil, fmt.Errorf("本程序只能压缩 jpg jpeg png 和gif，并且最后输出的都是jpeg文件，望周知")
 	}
-
 }
 
 func mark(i int, name string) {
