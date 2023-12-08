@@ -16,9 +16,9 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	"github.com/googege/collie/mem"
 	"github.com/googege/gotools/id"
 	"github.com/nfnt/resize"
+	"github.com/shgopher/collie/mem"
 )
 
 var (
